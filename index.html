@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Snake Game</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -21,6 +21,8 @@
             background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
             font-family: 'Orbitron', monospace;
             overflow: hidden;
+            max-width: 100vw;
+            max-height: 100vh;
         }
         
         body::before {
@@ -127,6 +129,10 @@
                 0 0 30px rgba(0, 255, 255, 0.3),
                 inset 0 0 30px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            aspect-ratio: 1;
         }
 
         .controls {
@@ -592,12 +598,10 @@
         /* Mobile Controller */
         .mobile-controller {
             display: none;
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
             background: rgba(0, 0, 0, 0.9);
             border-radius: 20px;
             border: 1px solid rgba(0, 255, 255, 0.3);
@@ -680,18 +684,44 @@
             pointer-events: none;
         }
         
+        /* Desktop optimizations */
+        @media (min-width: 1200px) {
+            .game-container {
+                max-width: 600px;
+                padding: 30px;
+            }
+            
+            canvas {
+                max-width: 500px;
+                max-height: 500px;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .game-container {
+                max-width: 500px;
+                padding: 25px;
+            }
+            
+            canvas {
+                max-width: 450px;
+                max-height: 450px;
+            }
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
-                padding-bottom: 180px; /* Espace pour le contrôleur */
+                min-height: 100vh;
+                overflow-y: auto;
             }
             
             .game-container {
-                padding: 20px;
+                padding: 15px;
                 border-radius: 15px;
                 max-width: 100%;
-                margin-bottom: 20px;
+                margin: 10px auto;
             }
             
             h1 {
@@ -713,7 +743,9 @@
                 max-width: 100%;
                 height: auto;
                 border-radius: 8px;
-                max-height: 50vh; /* Limiter la hauteur du canvas */
+                max-height: 40vh;
+                width: 100%;
+                aspect-ratio: 1;
             }
             
             .controls {
@@ -722,7 +754,9 @@
             }
             
             .mobile-controller {
-                display: block;
+                display: flex;
+                margin-top: 15px;
+                padding: 10px;
             }
             
             .audio-controls {
@@ -753,13 +787,14 @@
         @media (max-width: 480px) {
             body {
                 padding: 5px;
-                padding-bottom: 160px; /* Moins d'espace nécessaire sur petits écrans */
+                min-height: 100vh;
+                overflow-y: auto;
             }
             
             .game-container {
-                padding: 15px;
+                padding: 10px;
                 border-radius: 10px;
-                margin-bottom: 15px;
+                margin: 5px auto;
             }
             
             h1 {
@@ -776,11 +811,14 @@
             }
             
             canvas {
-                max-height: 45vh; /* Encore plus petit sur très petits écrans */
+                max-height: 35vh;
+                width: 100%;
+                aspect-ratio: 1;
             }
             
             .mobile-controller {
-                bottom: 5px;
+                display: flex;
+                margin-top: 10px;
                 padding: 8px;
             }
             
@@ -839,13 +877,24 @@
                     <div class="high-score"><span id="highScore">0</span></div>
                 </div>
             </div>
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            <canvas id="gameCanvas" width="400" height="400" style="width: 100%; max-width: 400px; height: auto; aspect-ratio: 1;"></canvas>
             <div class="controls">
                 <p>Utilisez les flèches directionnelles pour jouer</p>
             </div>
             <div class="game-over" id="gameOver">Game Over!</div>
             <button class="restart-btn" id="restartBtn" onclick="restartGame()">Recommencer</button>
             <button class="back-btn" onclick="showScreen('mainMenu')">Menu</button>
+            
+            <!-- Mobile Controller -->
+            <div class="mobile-controller" id="mobileController">
+                <div class="controller-pad">
+                    <button class="controller-button controller-up" data-direction="up">↑</button>
+                    <button class="controller-button controller-down" data-direction="down">↓</button>
+                    <button class="controller-button controller-left" data-direction="left">←</button>
+                    <button class="controller-button controller-right" data-direction="right">→</button>
+                    <div class="controller-center"></div>
+                </div>
+            </div>
         </div>
         
         <!-- Écran Options -->
@@ -996,17 +1045,6 @@
     <div class="audio-controls">
         <button class="audio-btn" id="audioToggle" onclick="toggleAudio()">🔊</button>
         <input type="range" class="volume-slider" id="quickVolume" min="0" max="100" value="50" onchange="updateVolume(this.value)">
-    </div>
-    
-    <!-- Mobile Controller -->
-    <div class="mobile-controller" id="mobileController">
-        <div class="controller-pad">
-            <button class="controller-button controller-up" data-direction="up">↑</button>
-            <button class="controller-button controller-down" data-direction="down">↓</button>
-            <button class="controller-button controller-left" data-direction="left">←</button>
-            <button class="controller-button controller-right" data-direction="right">→</button>
-            <div class="controller-center"></div>
-        </div>
     </div>
 
     <script>
