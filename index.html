@@ -593,10 +593,15 @@
         .mobile-controller {
             display: none;
             position: fixed;
-            bottom: 20px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
         
         .controller-pad {
@@ -679,12 +684,14 @@
         @media (max-width: 768px) {
             body {
                 padding: 10px;
+                padding-bottom: 180px; /* Espace pour le contrôleur */
             }
             
             .game-container {
                 padding: 20px;
                 border-radius: 15px;
                 max-width: 100%;
+                margin-bottom: 20px;
             }
             
             h1 {
@@ -706,6 +713,7 @@
                 max-width: 100%;
                 height: auto;
                 border-radius: 8px;
+                max-height: 50vh; /* Limiter la hauteur du canvas */
             }
             
             .controls {
@@ -743,9 +751,15 @@
         }
         
         @media (max-width: 480px) {
+            body {
+                padding: 5px;
+                padding-bottom: 160px; /* Moins d'espace nécessaire sur petits écrans */
+            }
+            
             .game-container {
                 padding: 15px;
                 border-radius: 10px;
+                margin-bottom: 15px;
             }
             
             h1 {
@@ -761,8 +775,13 @@
                 font-size: 1.4em;
             }
             
+            canvas {
+                max-height: 45vh; /* Encore plus petit sur très petits écrans */
+            }
+            
             .mobile-controller {
-                bottom: 15px;
+                bottom: 5px;
+                padding: 8px;
             }
             
             .controller-pad {
